@@ -1,0 +1,84 @@
+<!-- ============================================
+     VINX, KEN & ZYNTRI STUDIO
+     CineStream — Custom Page Renderer
+     ============================================ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page — CineStream</title>
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e50914'/><text x='16' y='22' font-size='18' font-weight='bold' text-anchor='middle' fill='white'>C</text></svg>">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/home.css">
+    <style>
+        .page-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: calc(var(--navbar-height) + var(--space-2xl)) var(--space-lg) var(--space-3xl);
+        }
+
+        .page-container h1 {
+            font-size: var(--fs-3xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .page-container h2 {
+            font-size: var(--fs-xl);
+            margin: var(--space-xl) 0 var(--space-md);
+        }
+
+        .page-container h3 {
+            font-size: var(--fs-lg);
+            margin: var(--space-lg) 0 var(--space-sm);
+        }
+
+        .page-container p,
+        .page-container li {
+            color: var(--text-secondary);
+            line-height: var(--lh-relaxed);
+        }
+
+        .page-container a {
+            color: var(--accent-red);
+        }
+
+        .page-not-found {
+            text-align: center;
+            padding: var(--space-4xl);
+        }
+
+        .page-not-found h2 {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="navbar__logo">
+            <span class="navbar__logo-icon">C</span>
+            <span class="navbar__logo-text">Cine<span class="navbar__logo-accent">Stream</span></span>
+        </a>
+        <div class="navbar__actions">
+            <a href="index.html" class="btn btn-secondary" style="font-size:var(--fs-sm)">← Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="page-container" id="pageContent">
+        <div class="page-not-found">
+            <h2>Loading...</h2>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/page.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,810 @@
+<!-- ============================================
+     VINX, KEN & ZYNTRI STUDIO
+     CineStream — Admin Panel
+     ============================================ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — CineStream</title>
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e50914'/><text x='16' y='22' font-size='18' font-weight='bold' text-anchor='middle' fill='white'>C</text></svg>">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <!-- PIN Gate -->
+    <div class="admin-gate" id="adminGate">
+        <div class="admin-gate__card">
+            <div class="admin-gate__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </div>
+            <h2 class="admin-gate__title">Admin Access</h2>
+            <p class="admin-gate__sub">Enter your PIN to continue</p>
+            <p class="admin-gate__error" id="pinError">Incorrect PIN. Try again.</p>
+            <input type="password" class="admin-gate__input" id="pinInput" maxlength="6" placeholder="••••" autofocus>
+            <button class="btn btn-primary btn-lg" style="width:100%" onclick="verifyPin()">Unlock</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-layout" id="adminDash" style="display:none">
+        <button class="admin-mobile-toggle" id="sidebarToggle"
+            onclick="document.getElementById('adminSidebar').classList.toggle('open')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar__logo"><span class="admin-sidebar__logo-icon">C</span><span>CineStream</span>
+            </div>
+            <div class="admin-nav">
+                <button class="admin-nav__item active" data-tab="dashboard" onclick="switchTab('dashboard')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                    </svg>Dashboard</button>
+                <button class="admin-nav__item" data-tab="builder" onclick="switchTab('builder')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M3 9h18M9 21V9" />
+                    </svg>Homepage Builder</button>
+                <button class="admin-nav__item" data-tab="banners" onclick="switchTab('banners')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                        <path d="m6 12 4-4 4 4 4-4" />
+                    </svg>Hero Banners</button>
+                <button class="admin-nav__item" data-tab="movies" onclick="switchTab('movies')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="2" />
+                        <path d="M7 2v20M17 2v20M2 12h20" />
+                    </svg>Movies</button>
+                <button class="admin-nav__item" data-tab="categories" onclick="switchTab('categories')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" />
+                    </svg>Categories</button>
+                <button class="admin-nav__item" data-tab="ott" onclick="switchTab('ott')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="15" rx="2" />
+                        <polyline points="17 2 12 7 7 2" />
+                    </svg>OTT Platforms</button>
+                <button class="admin-nav__item" data-tab="theme" onclick="switchTab('theme')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 2a7 7 0 0 0 0 20 4 4 0 0 0 0-8 4 4 0 0 1 0-8" />
+                        <circle cx="12" cy="8" r="1.5" fill="currentColor" />
+                    </svg>Theme</button>
+                <button class="admin-nav__item" data-tab="settings" onclick="switchTab('settings')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                    </svg>Settings</button>
+                <button class="admin-nav__item" data-tab="seo" onclick="switchTab('seo')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>SEO</button>
+                <button class="admin-nav__item" data-tab="player" onclick="switchTab('player')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21" />
+                    </svg>Player</button>
+                <button class="admin-nav__item" data-tab="pages" onclick="switchTab('pages')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                    </svg>Pages</button>
+                <button class="admin-nav__item" data-tab="analytics" onclick="switchTab('analytics')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 20V10M12 20V4M6 20v-6" />
+                    </svg>Analytics</button>
+                <button class="admin-nav__item" data-tab="ads" onclick="switchTab('ads')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <path d="M8 21h8M12 17v4" />
+                    </svg>Ads Manager</button>
+                <button class="admin-nav__item" data-tab="requests" onclick="switchTab('requests')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>Requests</button>
+                <button class="admin-nav__item" data-tab="security" onclick="switchTab('security')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>Security</button>
+                <a href="index.html" class="admin-nav__item admin-nav__back"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="m12 19-7-7 7-7" />
+                        <path d="M19 12H5" />
+                    </svg>Back to Site</a>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <!-- ═══ Dashboard ═══ -->
+            <div class="admin-tab" id="tab-dashboard">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Dashboard</h1>
+                </div>
+                <div class="stats-grid" id="statsGrid"></div>
+                <div class="admin-table-wrap">
+                    <div class="admin-table-header">
+                        <h3>Recent Movies</h3>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Platform</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentMoviesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Homepage Builder ═══ -->
+            <div class="admin-tab" id="tab-builder" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Homepage Builder</h1>
+                    <button class="btn btn-primary" onclick="openSectionModal()">+ Add Section</button>
+                </div>
+                <p style="color:var(--text-muted);margin-bottom:var(--space-lg)">Drag sections up/down to reorder.
+                    Toggle visibility to enable/disable.</p>
+                <div class="section-builder-list" id="sectionBuilderList"></div>
+            </div>
+
+            <!-- ═══ Hero Banners ═══ -->
+            <div class="admin-tab" id="tab-banners" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Hero Banners</h1>
+                    <button class="btn btn-primary" onclick="openBannerModal()">+ Add Banner</button>
+                </div>
+                <div class="admin-card" style="margin-bottom:var(--space-xl)">
+                    <h3 style="margin-bottom:var(--space-md)">Hero Settings</h3>
+                    <div style="display:flex;gap:var(--space-xl);align-items:center;flex-wrap:wrap">
+                        <label class="form-switch"><input type="checkbox" id="heroEnabled"
+                                onchange="saveHeroSettings()"><span class="form-switch__track"><span
+                                    class="form-switch__thumb"></span></span><span class="form-switch__label">Hero
+                                Enabled</span></label>
+                        <label class="form-switch"><input type="checkbox" id="heroAutoSlide"
+                                onchange="saveHeroSettings()"><span class="form-switch__track"><span
+                                    class="form-switch__thumb"></span></span><span
+                                class="form-switch__label">Auto-Slide</span></label>
+                        <div class="form-group" style="margin:0"><label>Speed (ms)</label><input class="form-control"
+                                type="number" id="heroSpeed" value="5000" min="1000" max="15000" step="500"
+                                style="width:120px" onchange="saveHeroSettings()"></div>
+                    </div>
+                </div>
+                <div id="bannersList"></div>
+            </div>
+
+            <!-- ═══ Movies ═══ -->
+            <div class="admin-tab" id="tab-movies" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Manage Movies</h1>
+                    <button class="btn btn-primary" onclick="openMovieModal()">+ Add Movie</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Platform</th>
+                                <th>Quality</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Featured</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moviesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Categories ═══ -->
+            <div class="admin-tab" id="tab-categories" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Categories</h1>
+                    <div style="display:flex;gap:var(--space-sm)"><input type="text" class="form-control"
+                            id="newCatInput" placeholder="New category" style="width:200px"><button
+                            class="btn btn-primary" onclick="addCat()">Add</button></div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Movies</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ OTT Platforms ═══ -->
+            <div class="admin-tab" id="tab-ott" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">OTT Platforms</h1>
+                    <button class="btn btn-primary" onclick="openOTTModal()">Add Platform</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Name</th>
+                                <th>Logo</th>
+                                <th>Color</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ottTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Theme ═══ -->
+            <div class="admin-tab" id="tab-theme" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Theme Customization</h1>
+                </div>
+                <div class="admin-card">
+                    <div class="form-row">
+                        <div class="form-group"><label>Primary Color</label><input class="form-control" type="color"
+                                id="tPrimary" value="#e50914"></div>
+                        <div class="form-group"><label>Accent Color</label><input class="form-control" type="color"
+                                id="tAccent" value="#ff3d5a"></div>
+                        <div class="form-group"><label>Background Color</label><input class="form-control" type="color"
+                                id="tBg" value="#0a0a0a"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Card Radius (px)</label><input class="form-control" type="range"
+                                id="tRadius" min="0" max="24" value="12"><span id="tRadiusVal"
+                                style="color:var(--text-muted);font-size:var(--fs-sm)">12px</span></div>
+                        <div class="form-group"><label>Glass Blur (px)</label><input class="form-control" type="range"
+                                id="tGlass" min="0" max="40" value="20"><span id="tGlassVal"
+                                style="color:var(--text-muted);font-size:var(--fs-sm)">20px</span></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Font Family</label>
+                            <select class="form-control" id="tFont">
+                                <option value="Inter">Inter</option>
+                                <option value="Outfit">Outfit</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Poppins">Poppins</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Open Sans">Open Sans</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Dark Mode</label><label class="form-switch"><input
+                                    type="checkbox" id="tDarkMode" checked><span class="form-switch__track"><span
+                                        class="form-switch__thumb"></span></span><span
+                                    class="form-switch__label">Enabled</span></label></div>
+                    </div>
+                    <div style="display:flex;gap:var(--space-sm);margin-top:var(--space-lg)">
+                        <button class="btn btn-primary" onclick="saveTheme()">Save Theme</button>
+                        <button class="btn btn-secondary" onclick="resetTheme()">Reset to Default</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ Settings ═══ -->
+            <div class="admin-tab" id="tab-settings" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Global Settings</h1>
+                </div>
+                <div class="admin-card">
+                    <h3 style="margin-bottom:var(--space-md)">Site Info</h3>
+                    <div class="form-group"><label>Website Name</label><input class="form-control" id="sSiteName"
+                            placeholder="CineStream"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Logo URL</label><input class="form-control" id="sLogoUrl"
+                                placeholder="https://..."></div>
+                        <div class="form-group"><label>Favicon URL</label><input class="form-control" id="sFavicon"
+                                placeholder="https://..."></div>
+                    </div>
+                    <div class="form-group"><label>Footer Text</label><input class="form-control" id="sFooter"
+                            placeholder="© 2025 CineStream"></div>
+                    <div class="form-group"><label>Telegram Channel</label><input class="form-control" id="sTelegram"
+                            placeholder="https://t.me/..."></div>
+                    <h3 style="margin:var(--space-xl) 0 var(--space-md)">Social Links</h3>
+                    <div class="form-row">
+                        <div class="form-group"><label>Twitter/X</label><input class="form-control" id="sSocialTwitter"
+                                placeholder="https://..."></div>
+                        <div class="form-group"><label>Instagram</label><input class="form-control" id="sSocialInsta"
+                                placeholder="https://..."></div>
+                        <div class="form-group"><label>YouTube</label><input class="form-control" id="sSocialYT"
+                                placeholder="https://..."></div>
+                    </div>
+                    <h3 style="margin:var(--space-xl) 0 var(--space-md)">Maintenance & Announcements</h3>
+                    <div class="form-row">
+                        <div class="form-group"><label>Maintenance Mode</label><label class="form-switch"><input
+                                    type="checkbox" id="sMaintenance"><span class="form-switch__track"><span
+                                        class="form-switch__thumb"></span></span><span
+                                    class="form-switch__label">Enabled</span></label></div>
+                        <div class="form-group"><label>Announcement</label><label class="form-switch"><input
+                                    type="checkbox" id="sAnnounce"><span class="form-switch__track"><span
+                                        class="form-switch__thumb"></span></span><span
+                                    class="form-switch__label">Enabled</span></label></div>
+                    </div>
+                    <div class="form-group"><label>Maintenance Message</label><textarea class="form-control"
+                            id="sMaintenanceMsg" rows="2"></textarea></div>
+                    <div class="form-group"><label>Announcement Message</label><textarea class="form-control"
+                            id="sAnnounceMsg" rows="2"></textarea></div>
+                    <div class="form-group"><label>Announcement Type</label><select class="form-control"
+                            id="sAnnounceType">
+                            <option value="info">Info</option>
+                            <option value="warning">Warning</option>
+                            <option value="success">Success</option>
+                        </select></div>
+                    <button class="btn btn-primary" style="margin-top:var(--space-md)" onclick="saveSettings()">Save
+                        Settings</button>
+                </div>
+            </div>
+
+            <!-- ═══ SEO ═══ -->
+            <div class="admin-tab" id="tab-seo" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">SEO Manager</h1>
+                </div>
+                <div class="admin-card">
+                    <div class="form-group"><label>Meta Title</label><input class="form-control" id="seoTitle"></div>
+                    <div class="form-group"><label>Meta Description</label><textarea class="form-control" id="seoDesc"
+                            rows="3"></textarea></div>
+                    <div class="form-group"><label>Open Graph Image URL</label><input class="form-control" id="seoOg"
+                            placeholder="https://..."></div>
+                    <button class="btn btn-primary" style="margin-top:var(--space-md)" onclick="saveSEO()">Save
+                        SEO</button>
+                </div>
+            </div>
+
+            <!-- ═══ Player ═══ -->
+            <div class="admin-tab" id="tab-player" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Player Control</h1>
+                </div>
+                <div class="admin-card">
+                    <div style="display:flex;gap:var(--space-xl);flex-wrap:wrap;margin-bottom:var(--space-lg)">
+                        <label class="form-switch"><input type="checkbox" id="pEmbed" checked><span
+                                class="form-switch__track"><span class="form-switch__thumb"></span></span><span
+                                class="form-switch__label">Enable Telegram Embed</span></label>
+                        <label class="form-switch"><input type="checkbox" id="pLoading" checked><span
+                                class="form-switch__track"><span class="form-switch__thumb"></span></span><span
+                                class="form-switch__label">Loading Animation</span></label>
+                    </div>
+                    <div class="form-group"><label>Pre-Play Warning Text</label><textarea class="form-control"
+                            id="pWarning" rows="2" placeholder="Optional message shown before playback"></textarea>
+                    </div>
+                    <div class="form-group"><label>Fallback Error Message</label><textarea class="form-control"
+                            id="pFallback" rows="2" placeholder="Message when video is unavailable"></textarea></div>
+                    <button class="btn btn-primary" style="margin-top:var(--space-md)" onclick="savePlayerCfg()">Save
+                        Player Settings</button>
+                </div>
+            </div>
+
+            <!-- ═══ Pages ═══ -->
+            <div class="admin-tab" id="tab-pages" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Custom Pages</h1>
+                    <button class="btn btn-primary" onclick="openPageModal()">+ New Page</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Slug</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pagesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Analytics ═══ -->
+            <div class="admin-tab" id="tab-analytics" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Analytics</h1>
+                </div>
+                <div class="stats-grid" id="analyticsStats"></div>
+                <div class="admin-table-wrap" style="margin-top:var(--space-xl)">
+                    <div class="admin-table-header">
+                        <h3>Most Watched Movies</h3>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Views</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mostWatchedBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Ads Manager ═══ -->
+            <div class="admin-tab" id="tab-ads" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Ads Manager</h1>
+                    <button class="btn btn-primary" onclick="openAdModal()">+ Add Ad</button>
+                </div>
+                <div class="stats-grid" id="adsStats"></div>
+                <div class="admin-table-wrap">
+                    <div class="admin-table-header">
+                        <h3>All Advertisements</h3>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Position</th>
+                                <th>Frequency</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Movie Requests Manager ═══ -->
+            <div class="admin-tab" id="tab-requests" style="display:none">
+                <div class="admin-tab-header">
+                    <h2>Movie Requests</h2>
+                </div>
+                <div class="stats-grid" id="reqStats"></div>
+                <div class="admin-card" style="margin-top:var(--space-lg)">
+                    <div
+                        style="display:flex;align-items:center;gap:var(--space-sm);flex-wrap:wrap;margin-bottom:var(--space-md)">
+                        <button class="btn btn-secondary req-filter active" data-status="all"
+                            onclick="filterRequests('all')">All</button>
+                        <button class="btn btn-secondary req-filter" data-status="pending"
+                            onclick="filterRequests('pending')">⏳ Pending</button>
+                        <button class="btn btn-secondary req-filter" data-status="added"
+                            onclick="filterRequests('added')">✅ Added</button>
+                        <button class="btn btn-secondary req-filter" data-status="rejected"
+                            onclick="filterRequests('rejected')">❌ Rejected</button>
+                        <div style="flex:1"></div>
+                        <input type="text" id="reqSearchInput" class="form-input" placeholder="Search by movie..."
+                            style="max-width:220px;font-size:var(--fs-sm)" oninput="filterRequests()">
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Movie</th>
+                                <th>Language</th>
+                                <th>Platform</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reqTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Security ═══ -->
+            <div class="admin-tab" id="tab-security" style="display:none">
+                <div class="admin-header">
+                    <h1 class="admin-header__title">Security Settings</h1>
+                </div>
+                <div class="admin-card" style="max-width:500px">
+                    <h3 style="margin-bottom:var(--space-md)">Change Admin PIN</h3>
+                    <div class="form-group"><label>Current PIN</label><input class="form-control" type="password"
+                            id="secCurrentPin" maxlength="6"></div>
+                    <div class="form-group"><label>New PIN</label><input class="form-control" type="password"
+                            id="secNewPin" maxlength="6"></div>
+                    <div class="form-group"><label>Confirm New PIN</label><input class="form-control" type="password"
+                            id="secConfirmPin" maxlength="6"></div>
+                    <button class="btn btn-primary" onclick="changePin()">Change PIN</button>
+                    <h3 style="margin:var(--space-2xl) 0 var(--space-md)">Data Management</h3>
+                    <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap">
+                        <button class="btn btn-secondary" onclick="exportData()">Export All Data</button>
+                        <button class="btn btn-secondary"
+                            onclick="document.getElementById('importFileInput').click()">Import Data</button>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none"
+                            onchange="importData(event)">
+                        <button class="btn btn-secondary" style="border-color:var(--accent-red);color:var(--accent-red)"
+                            onclick="resetAllData()">Reset All Data</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ═══ MODALS ═══ -->
+
+    <!-- Movie Modal -->
+    <div class="admin-modal-overlay" id="movieModal">
+        <div class="admin-modal">
+            <div class="admin-modal__header">
+                <h3 id="movieModalTitle">Add Movie</h3><button class="btn-icon" onclick="closeMovieModal()"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="admin-modal__body">
+                <input type="hidden" id="editMovieId">
+                <div class="form-group"><label>Title *</label><input class="form-control" id="fTitle" required></div>
+                <div class="form-group"><label>Description</label><textarea class="form-control" id="fDesc"
+                        rows="3"></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Category *</label><select class="form-control"
+                            id="fCategory"></select></div>
+                    <div class="form-group"><label>Language</label><input class="form-control" id="fLang"
+                            placeholder="English"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Quality</label><select class="form-control" id="fQuality">
+                            <option value="HD">HD</option>
+                            <option value="4K">4K</option>
+                            <option value="1080p">1080p</option>
+                            <option value="720p">720p</option>
+                            <option value="CAM">CAM</option>
+                        </select></div>
+                    <div class="form-group"><label>Year</label><input class="form-control" id="fYear" type="number"
+                            placeholder="2025"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>OTT Platform</label><select class="form-control" id="fOttPlatform">
+                            <option value="">None</option>
+                        </select></div>
+                    <div class="form-group"><label>Display Priority</label><input class="form-control" id="fPriority"
+                            type="number" min="1" max="100" value="50" placeholder="1=highest"></div>
+                </div>
+                <div class="form-group"><label>Poster URL</label><input class="form-control" id="fPoster"
+                        placeholder="https://..."></div>
+                <div class="form-group"><label>Telegram Link *</label><input class="form-control" id="fTelegram"
+                        placeholder="https://t.me/..."></div>
+                <div class="form-group"><label>Genres (comma separated)</label><input class="form-control" id="fGenres"
+                        placeholder="Action, Thriller, Drama"></div>
+                <div class="form-group"><label>Badges (comma separated)</label><input class="form-control" id="fBadges"
+                        placeholder="NEW, HD, 4K"></div>
+                <div class="form-group"><label>Schedule Publish</label><input class="form-control" id="fSchedule"
+                        type="datetime-local"></div>
+                <div style="display:flex;gap:var(--space-xl);margin-top:var(--space-md);flex-wrap:wrap">
+                    <label class="form-switch"><input type="checkbox" id="fFeatured"><span
+                            class="form-switch__track"><span class="form-switch__thumb"></span></span><span
+                            class="form-switch__label">Featured</span></label>
+                    <label class="form-switch"><input type="checkbox" id="fTrending"><span
+                            class="form-switch__track"><span class="form-switch__thumb"></span></span><span
+                            class="form-switch__label">Trending</span></label>
+                    <label class="form-switch"><input type="checkbox" id="fTopRated"><span
+                            class="form-switch__track"><span class="form-switch__thumb"></span></span><span
+                            class="form-switch__label">Top Rated</span></label>
+                </div>
+            </div>
+            <div class="admin-modal__footer"><button class="btn btn-secondary"
+                    onclick="closeMovieModal()">Cancel</button><button class="btn btn-primary"
+                    onclick="saveMovie()">Save Movie</button></div>
+        </div>
+    </div>
+
+    <!-- OTT Modal -->
+    <div class="admin-modal-overlay" id="ottModal">
+        <div class="admin-modal">
+            <div class="admin-modal__header">
+                <h3>Add OTT Platform</h3><button class="btn-icon" onclick="closeOTTModal()"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="admin-modal__body">
+                <div class="form-group"><label>Platform Name *</label><input class="form-control" id="fOttName"></div>
+                <div class="form-group"><label>Logo URL</label><input class="form-control" id="fOttLogo"
+                        placeholder="https://..."></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Icon Letter</label><input class="form-control" id="fOttIcon"
+                            maxlength="2" placeholder="N"></div>
+                    <div class="form-group"><label>Brand Color</label><input class="form-control" id="fOttColor"
+                            type="color" value="#e50914"></div>
+                </div>
+            </div>
+            <div class="admin-modal__footer"><button class="btn btn-secondary"
+                    onclick="closeOTTModal()">Cancel</button><button class="btn btn-primary"
+                    onclick="saveOTT()">Add</button></div>
+        </div>
+    </div>
+
+    <!-- Section Modal -->
+    <div class="admin-modal-overlay" id="sectionModal">
+        <div class="admin-modal">
+            <div class="admin-modal__header">
+                <h3 id="sectionModalTitle">Add Section</h3><button class="btn-icon" onclick="closeSectionModal()"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="admin-modal__body">
+                <input type="hidden" id="editSectionId">
+                <div class="form-group"><label>Section Title *</label><input class="form-control" id="fSectionTitle"
+                        placeholder="🔥 Trending Now"></div>
+                <div class="form-group"><label>Section Type *</label>
+                    <select class="form-control" id="fSectionType" onchange="toggleSectionConfig()">
+                        <option value="trending">Trending</option>
+                        <option value="latest">Latest</option>
+                        <option value="category">Category-based</option>
+                        <option value="featured">Featured</option>
+                        <option value="topRated">Top Rated</option>
+                        <option value="manual">Manual Selection</option>
+                        <option value="ottPlatform">OTT Platform</option>
+                    </select>
+                </div>
+                <div class="form-group" id="sectionCatConfig" style="display:none"><label>Category</label><select
+                        class="form-control" id="fSectionCategory"></select></div>
+                <div class="form-group" id="sectionOttConfig" style="display:none"><label>OTT Platform</label><select
+                        class="form-control" id="fSectionOtt"></select></div>
+                <div class="form-group" id="sectionManualConfig" style="display:none"><label>Movie IDs (comma
+                        separated)</label><input class="form-control" id="fSectionMovieIds" placeholder="id1, id2, id3">
+                </div>
+            </div>
+            <div class="admin-modal__footer"><button class="btn btn-secondary"
+                    onclick="closeSectionModal()">Cancel</button><button class="btn btn-primary"
+                    onclick="saveSection()">Save Section</button></div>
+        </div>
+    </div>
+
+    <!-- Banner Modal -->
+    <div class="admin-modal-overlay" id="bannerModal">
+        <div class="admin-modal">
+            <div class="admin-modal__header">
+                <h3 id="bannerModalTitle">Add Banner</h3><button class="btn-icon" onclick="closeBannerModal()"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="admin-modal__body">
+                <input type="hidden" id="editBannerId">
+                <div class="form-group"><label>Select Movie</label><select class="form-control"
+                        id="fBannerMovie"></select></div>
+                <div class="form-group"><label>Custom Heading</label><input class="form-control" id="fBannerHeading"
+                        placeholder="Override movie title"></div>
+                <div class="form-group"><label>Custom Subtext</label><textarea class="form-control" id="fBannerSubtext"
+                        rows="2" placeholder="Override description"></textarea></div>
+                <div class="form-group"><label>Backdrop Image URL</label><input class="form-control" id="fBannerImage"
+                        placeholder="https://... (leave empty to use movie poster)"></div>
+            </div>
+            <div class="admin-modal__footer"><button class="btn btn-secondary"
+                    onclick="closeBannerModal()">Cancel</button><button class="btn btn-primary"
+                    onclick="saveBanner()">Save Banner</button></div>
+        </div>
+    </div>
+
+    <!-- Page Modal -->
+    <div class="admin-modal-overlay" id="pageModal">
+        <div class="admin-modal" style="max-width:800px">
+            <div class="admin-modal__header">
+                <h3 id="pageModalTitle">Add Page</h3><button class="btn-icon" onclick="closePageModal()"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="admin-modal__body">
+                <input type="hidden" id="editPageId">
+                <div class="form-row">
+                    <div class="form-group"><label>Page Title *</label><input class="form-control" id="fPageTitle">
+                    </div>
+                    <div class="form-group"><label>URL Slug *</label><input class="form-control" id="fPageSlug"
+                            placeholder="about"></div>
+                </div>
+                <div class="form-group"><label>Content (Markdown)</label><textarea class="form-control"
+                        id="fPageContent" rows="12" style="font-family:monospace;font-size:var(--fs-sm)"></textarea>
+                </div>
+                <details style="margin-top:var(--space-sm)">
+                    <summary style="cursor:pointer;color:var(--text-muted);font-size:var(--fs-sm)">Preview</summary>
+                    <div id="pagePreview" class="admin-card" style="margin-top:var(--space-sm);min-height:100px"></div>
+                </details>
+            </div>
+            <div class="admin-modal__footer"><button class="btn btn-secondary"
+                    onclick="closePageModal()">Cancel</button><button class="btn btn-primary" onclick="savePage()">Save
+                    Page</button></div>
+        </div>
+    </div>
+
+    <!-- Ad Modal -->
+    <div class="admin-modal-overlay" id="adModal">
+        <div class="admin-modal" style="max-width:700px">
+            <div class="admin-modal__header">
+                <h3 id="adModalTitle">Add Advertisement</h3><button class="btn-icon" onclick="closeAdModal()"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="admin-modal__body">
+                <input type="hidden" id="editAdId">
+                <div class="form-row">
+                    <div class="form-group"><label>Ad Type *</label>
+                        <select class="form-control" id="fAdType">
+                            <option value="banner">Banner Ad</option>
+                            <option value="popup">Popup Ad</option>
+                            <option value="inline">In-Content Ad</option>
+                            <option value="sticky">Sticky Bottom Ad</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Display Position</label>
+                        <select class="form-control" id="fAdPosition">
+                            <option value="below-hero">Below Hero Banner</option>
+                            <option value="between-sections">Between Sections</option>
+                            <option value="after-ott">After OTT Filter</option>
+                            <option value="above-footer">Above Footer</option>
+                            <option value="center-popup">Center Popup</option>
+                            <option value="sticky-bottom">Sticky Bottom</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Frequency</label>
+                        <select class="form-control" id="fAdFrequency">
+                            <option value="always">Always Show</option>
+                            <option value="once-session">Once Per Session</option>
+                            <option value="once-day">Once Per Day</option>
+                            <option value="every-3">Every 3rd Visit</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Label (Internal)</label>
+                        <input class="form-control" id="fAdLabel" placeholder="e.g. Homepage Top Banner">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ad Content (HTML / JS Code) *</label>
+                    <p style="font-size:var(--fs-xs);color:var(--text-muted);margin-bottom:var(--space-xs)">Paste your
+                        AdSense code, custom HTML banner, or any ad script here.</p>
+                    <textarea class="form-control" id="fAdContent" rows="10"
+                        style="font-family:monospace;font-size:var(--fs-sm)" placeholder='<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Your Ad Unit -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-xxx" data-ad-slot="xxx" data-ad-format="auto"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'></textarea>
+                </div>
+                <div style="display:flex;gap:var(--space-xl);flex-wrap:wrap">
+                    <label class="form-switch"><input type="checkbox" id="fAdActive" checked><span
+                            class="form-switch__track"><span class="form-switch__thumb"></span></span><span
+                            class="form-switch__label">Active</span></label>
+                </div>
+                <details style="margin-top:var(--space-md)">
+                    <summary style="cursor:pointer;color:var(--text-muted);font-size:var(--fs-sm)">Preview</summary>
+                    <div id="adPreview" class="admin-card"
+                        style="margin-top:var(--space-sm);min-height:80px;overflow:auto;max-height:300px"></div>
+                </details>
+            </div>
+            <div class="admin-modal__footer"><button class="btn btn-secondary"
+                    onclick="closeAdModal()">Cancel</button><button class="btn btn-primary" onclick="saveAd()">Save
+                    Ad</button></div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

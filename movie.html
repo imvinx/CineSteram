@@ -1,0 +1,128 @@
+<!-- ============================================
+     VINX, KEN & ZYNTRI STUDIO
+     CineStream — Movie Detail Page
+     ============================================ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie — CineStream</title>
+    <meta name="description" content="Watch this movie for free on CineStream">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e50914'/><text x='16' y='22' font-size='18' font-weight='bold' text-anchor='middle' fill='white'>C</text></svg>">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/movie.css">
+</head>
+
+<body>
+    <div class="movie-page" id="moviePage">
+        <!-- Banner -->
+        <div class="movie-banner" id="movieBanner">
+            <img class="movie-banner__img" id="bannerImg" src="" alt="">
+            <div class="movie-banner__gradient"></div>
+            <button class="movie-banner__back" id="backBtn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+            </button>
+            <button class="movie-banner__back theme-toggle" id="themeToggle" style="left:auto;right:var(--space-lg)"
+                aria-label="Toggle theme">
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5" />
+                    <path
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Detail -->
+        <div class="movie-detail" id="movieDetail">
+            <div class="movie-detail__header">
+                <h1 class="movie-detail__title" id="movieTitle"></h1>
+                <div class="movie-detail__meta" id="movieMeta"></div>
+                <div class="movie-detail__genres" id="movieGenres"></div>
+            </div>
+            <p class="movie-detail__description" id="movieDesc"></p>
+            <div class="movie-detail__actions">
+                <button class="btn-watch" id="watchBtn" onclick="scrollToPlayer()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5,3 19,12 5,21" />
+                    </svg>
+                    Watch Now
+                </button>
+                <a class="btn btn-secondary" id="telegramDirectLink" href="#" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="width:16px;height:16px">
+                        <path
+                            d="M11.944 0A12 12 0 1 0 24 12.056A12.014 12.014 0 0 0 11.944 0Zm5.654 7.025c-.125.69-1.835 10.35-1.835 10.35s-.066.43-.394.445a.61.61 0 0 1-.453-.19c-.63-.535-2.854-1.88-3.356-2.222a.162.162 0 0 1-.008-.274c.392-.32 4.083-3.705 4.175-4.008.012-.038.023-.179-.067-.254s-.222-.048-.318-.028c-.137.028-2.311 1.468-6.525 4.312a.97.97 0 0 1-.543.153c-.172-.01-1.026-.239-1.026-.239s-.621-.244-.43-.549c.04-.063.12-.127.358-.262C9.064 13.584 12.865 11.79 13.76 11.385c2.79-1.26 2.79-1.14 2.79-1.14l.002-.003a1.198 1.198 0 0 1 1.046-3.217Z" />
+                    </svg>
+                    Open in Telegram
+                </a>
+                <button class="btn btn-secondary" onclick="history.back()">← Back</button>
+            </div>
+        </div>
+
+        <!-- Telegram Player -->
+        <section class="player-section" id="playerSection">
+            <div class="player-section__header">
+                <h2 class="player-section__title">
+                    <svg viewBox="0 0 24 24" fill="currentColor" style="width:24px;height:24px;color:var(--accent-red)">
+                        <polygon points="5,3 19,12 5,21" />
+                    </svg>
+                    Now Playing
+                </h2>
+            </div>
+            <div class="player-container" id="playerContainer">
+                <!-- Loading State -->
+                <div class="player-loading" id="playerLoading">
+                    <div class="player-loading__spinner"></div>
+                    <p class="player-loading__text">Loading player...</p>
+                </div>
+                <!-- Error State -->
+                <div class="player-error" id="playerError" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:48px;height:48px;color:var(--accent-red)">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="m15 9-6 6M9 9l6 6" />
+                    </svg>
+                    <p class="player-error__title">Unable to load video</p>
+                    <p class="player-error__text">The Telegram post may be unavailable or private.</p>
+                    <a class="btn btn-primary" id="playerFallbackLink" href="#" target="_blank" rel="noopener">Open in
+                        Telegram</a>
+                </div>
+                <!-- Embed will be injected here -->
+                <div class="player-embed" id="playerEmbed"></div>
+            </div>
+        </section>
+
+        <!-- Related Movies -->
+        <div class="movie-related" id="relatedSection" style="display:none">
+            <h2 class="movie-related__title">You May Also Like</h2>
+            <div class="slider-container">
+                <button class="slider-arrow slider-arrow--left"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg></button>
+                <div class="slider-track" id="relatedTrack"></div>
+                <button class="slider-arrow slider-arrow--right"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/movie.js"></script>
+</body>
+
+</html>
